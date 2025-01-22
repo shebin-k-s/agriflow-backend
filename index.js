@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from 'dotenv';
 import session from "express-session";
+import { authRouter } from "./routes/index.js";
 
 
 dotenv.config();
@@ -20,6 +21,10 @@ app.use(session({
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+
+app.use("/api/v1/auth",authRouter );
+
 
 
 
