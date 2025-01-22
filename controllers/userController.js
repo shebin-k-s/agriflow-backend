@@ -22,6 +22,8 @@ export const sendOTP = async (req, res) => {
 
 
         const otp = generateOTP();
+        console.log(otp);
+        
         req.session.otp = otp;
         req.session.email = email;
 
@@ -66,6 +68,8 @@ export const verifyOTP = async (req, res) => {
         };
 
         await saveSessionData(sessionId, sessionData);
+        console.log("sended");
+
 
         return res.status(200).json({ message: 'OTP verified successfully' });
     } catch (error) {
@@ -106,10 +110,9 @@ export const sendEmail = async (email, otp) => {
 };
 
 export const signupUser = async (req, res) => {
-    const { fullName, password, sessionId } = req.body
+    const { name, password, sessionId } = req.body
 
     console.log(req.body);
-
 
 
     try {
@@ -134,7 +137,7 @@ export const signupUser = async (req, res) => {
 
         const newUser = new User({
             email: sessionData.email,
-            fullName,
+            name,
             password: hashedPassword
         });
 
@@ -155,6 +158,8 @@ export const signupUser = async (req, res) => {
 export const login = async (req, res) => {
 
     const { email, password } = req.body;
+    console.log(req.body);
+
 
     try {
 
@@ -172,17 +177,19 @@ export const login = async (req, res) => {
 
             return res.status(401).json({ message: "Incorrect Password" })
         } else {
-            const token = Jwt.sign({ userId: user._id, role: "User" }, process.env.JWT_TOKEN);
+            const token = Jwt.sign({ userId: user._id }, process.env.JWT_TOKEN);
             return res.status(200).json({
                 message: "Login Successfull",
                 token: token,
-                fullName: user.fullName,
+                name: user.name,
                 email: user.email
             })
         }
 
 
     } catch (error) {
+        console.log(error);
+
         if (error.name === "ValidationError") {
             const errors = Object.values(error.errors).map(err => err.message);
             return res.status(400).json({ message: errors.join(", ") });
@@ -222,7 +229,7 @@ export const forgotPassword = async (req, res) => {
             }
         });
         console.log(otp);
-        
+
 
         const mailOptions = {
             from: "Agri Flow",

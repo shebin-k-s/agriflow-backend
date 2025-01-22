@@ -15,10 +15,10 @@ const userSchema = new mongoose.Schema({
         required: [true, "Password is required"],
         minlength: 6
     },
-    devices: [
+    fields: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Device',
+            ref: 'Field',
         },
     ],
 })
