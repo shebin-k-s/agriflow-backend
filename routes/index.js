@@ -3,5 +3,5 @@ import fieldRouter from './fieldRouter.js'
 
 export {
     authRouter,
-    fieldRouter,
+    fieldRouter
 };

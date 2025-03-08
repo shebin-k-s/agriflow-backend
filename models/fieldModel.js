@@ -13,44 +13,89 @@ const fieldSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    address: {
+        type: String,
+        required: true, 
+    },
+    location: {
+        type: {
+            type: String,
+            enum: ['Point'],
+            default: 'Point'
+        },
+        coordinates: {
+            type: [Number],
+            required: [true, 'Coordinates are required']
+        }
+    },
     currentCrop: {
         type: String,
-        default: "None"
+        default: "None",
     },
+    sensorReadings: {
+        moisture: {
+            type: Number,
+            default: 0
+        },
+        temperature: {
+            type: Number,
+            default: 0
+        },
+        pH: {
+            type: Number,
+            default: 0
 
-    moisture: {
+        },
+        nitrogen: {
+            type: Number,
+            default: 0
+        },
+        phosphorus: {
+            type: Number,
+            default: 0
+        },
+        potassium: {
+            type: Number,
+            default: 0
+        },
+    },
+    nutrientsNeeded: {
+        nitrogen: {
+            type: Number,
+            default: 0
+
+        },
+        phosphorus: {
+            type: Number,
+            default: 0
+        },
+        potassium: {
+            type: Number,
+            default: 0
+        },
+    },
+    cropRecommendations: [
+        {
+            crop: String,
+            composite_score: Number,
+            condition_match: Number,
+            yield_score: Number
+        }
+    ],
+    annualRainfall: {
         type: Number,
         default: 0,
     },
-    temperature: {
+    annualTemperature: {
         type: Number,
         default: 0,
-
     },
-    pH: {
-        type: Number,
-        default: 0,
-
+    createdAt: {
+        type: Date,
+        default: Date.now,
     },
-    nitrogen: {
-        type: Number,
-        default: 0,
+});
 
-    },
-    phosphorus: {
-        type: Number,
-        default: 0,
+const Field = mongoose.model("Field", fieldSchema);
 
-    },
-    potassium: {
-        type: Number,
-        default: 0,
-
-    },
-
-})
-
-const Field = mongoose.model('Field', fieldSchema)
-
-
-export default Field
+export default Field;
