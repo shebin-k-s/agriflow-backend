@@ -100,7 +100,6 @@ export const fetchFields = async (req, res) => {
 
     try {
         const user = await User.findById(userId).populate('fields');
-        console.log(user);
 
         if (!user) {
             return res.status(404).json({ message: "User not found" });
@@ -139,6 +138,7 @@ export const updateSensorReadings = async (req, res) => {
             phosphorus: phosphorus || field.sensorReadings.phosphorus,
             potassium: potassium || field.sensorReadings.potassium,
         };
+        field.sensorReadingsLastUpdated = new Date();
 
         await field.save();
 
@@ -158,6 +158,10 @@ export const predictCropRecommendation = async (req, res) => {
 
     try {
         const field = await Field.findById(fieldId);
+
+        console.log(field);
+
+
         if (!field) {
             return res.status(404).json({ message: "Field not found" });
         }
@@ -167,7 +171,11 @@ export const predictCropRecommendation = async (req, res) => {
         }
 
         const { nitrogen, phosphorus, potassium, pH } = field.sensorReadings;
-
+        if (nitrogen === 0 || phosphorus === 0 || potassium === 0 || pH === 0) {
+            return res.status(400).json({
+                message: "Invalid sensor data: N, P, K and pH values must be greater than 0."
+            });
+        }
         const requestBody = {
             N: nitrogen,
             P: phosphorus,
@@ -211,7 +219,11 @@ export const predictCropRecommendation = async (req, res) => {
 
 
         field.cropRecommendations = responseData;
+        field.cropRecommendationsLastUpdated = new Date();
         await field.save();
+
+        console.log(responseData);
+
 
         return res.status(200).json({
             message: "Crop recommendation fetched successfully",
@@ -229,7 +241,6 @@ export const deleteField = async (req, res) => {
     const userId = req.user.userId;
 
     try {
-        // Find the field by ID
         const field = await Field.findById(fieldId);
         if (!field) {
             return res.status(404).json({ message: "Field not found" });

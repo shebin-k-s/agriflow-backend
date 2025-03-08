@@ -15,7 +15,7 @@ const fieldSchema = new mongoose.Schema({
     },
     address: {
         type: String,
-        required: true, 
+        required: true,
     },
     location: {
         type: {
@@ -74,6 +74,10 @@ const fieldSchema = new mongoose.Schema({
             default: 0
         },
     },
+    sensorReadingsLastUpdated: {
+        type: Date,
+        default: null,
+    },
     cropRecommendations: [
         {
             crop: String,
@@ -82,6 +86,10 @@ const fieldSchema = new mongoose.Schema({
             yield_score: Number
         }
     ],
+    cropRecommendationsLastUpdated: {
+        type: Date,
+        default: null,
+    },
     annualRainfall: {
         type: Number,
         default: 0,
