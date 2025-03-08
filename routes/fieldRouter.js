@@ -10,7 +10,7 @@ router.route("/add")
     .post(addField)
 
 router.route("/remove/:fieldId")
-    .post(deleteField)
+    .delete(deleteField)
 
 router.route('/update-sensors/:fieldId')
     .put(updateSensorReadings)
