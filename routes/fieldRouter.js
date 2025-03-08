@@ -9,7 +9,7 @@ router.route("/")
 router.route("/add")
     .post(addField)
 
-router.route("/remove")
+router.route("/remove/:fieldId")
     .post(deleteField)
 
 router.route('/update-sensors/:fieldId')
