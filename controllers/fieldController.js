@@ -152,6 +152,31 @@ export const updateSensorReadings = async (req, res) => {
     }
 };
 
+export const setCurrentCrop = async (req, res) => {
+    const { fieldId, currentCrop } = req.body;
+
+    try {
+        const field = await Field.findById(fieldId);
+        if (!field) {
+            return res.status(404).json({ message: "Field not found" });
+        }
+
+        field.currentCrop = currentCrop;
+
+        await field.save();
+
+        return res.status(200).json({
+            message: "Crop selected successfully",
+            currentCrop: field.currentCrop
+        });
+
+    } catch (error) {
+        console.error("Error selecting crop:", error.message);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+};
+
+
 
 export const predictCropRecommendation = async (req, res) => {
     const { fieldId } = req.params;
