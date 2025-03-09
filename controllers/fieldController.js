@@ -1,3 +1,4 @@
+import { optimalNutrients } from '../constant.js';
 import Field from '../models/fieldModel.js';
 import User from '../models/userModel.js';
 import axios from 'axios';
@@ -163,6 +164,19 @@ export const setCurrentCrop = async (req, res) => {
 
         field.currentCrop = currentCrop;
 
+        const formattedCrop = currentCrop.charAt(0).toUpperCase() + currentCrop.slice(1).toLowerCase();
+
+
+        if (optimalNutrients[formattedCrop]) {
+
+            console.log(optimalNutrients[formattedCrop]);
+
+            field.nutrientsNeeded = optimalNutrients[formattedCrop];
+        } else {
+
+            field.nutrientsNeeded = { nitrogen: 0, phosphorus: 0, potassium: 0 };
+        }
+
         await field.save();
 
         return res.status(200).json({
@@ -237,7 +251,7 @@ export const predictCropRecommendation = async (req, res) => {
                 console.error(`Error fetching crop recommendation (Attempt ${attempts}/${maxRetries}):`, error.message);
 
                 if (attempts >= maxRetries) {
-                    return res.status(500).json({ message: "Failed to fetch crop recommendation after multiple attempts" });
+                    return res.status(500).json({ fieldId: fieldId, message: "Failed to fetch crop recommendation after multiple attempts" });
                 }
             }
         }
@@ -252,12 +266,13 @@ export const predictCropRecommendation = async (req, res) => {
 
         return res.status(200).json({
             message: "Crop recommendation fetched successfully",
+            fieldId: fieldId,
             recommendation: responseData
         });
 
     } catch (error) {
         console.error("Error fetching crop recommendation:", error.message);
-        return res.status(500).json({ message: "Internal server error" });
+        return res.status(500).json({ fieldId: fieldId, message: "Internal server error" });
     }
 };
 
