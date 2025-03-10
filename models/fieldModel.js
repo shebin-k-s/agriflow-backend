@@ -74,6 +74,14 @@ const fieldSchema = new mongoose.Schema({
             default: 0
         },
     },
+    irrigationDelayDays: {
+        type: Number,
+        default: 0
+    },
+    irrigationNeeded: {
+        type: Boolean,
+        default: false
+    },
     sensorReadingsLastUpdated: {
         type: Date,
         default: null,

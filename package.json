@@ -20,6 +20,7 @@
     "fs": "^0.0.1-security",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.9.5",
+    "node-cron": "^3.0.3",
     "nodemailer": "^6.9.16",
     "python-shell": "^5.0.0"
   }
