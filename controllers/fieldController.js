@@ -381,7 +381,7 @@ export const checkIrrigation = async (fieldId) => {
     }
 };
 
-cron.schedule('* * * * *', async () => {
+cron.schedule('0 10 * * *', async () => {
     console.log("⏳ Running daily irrigation check...");
 
     try {
