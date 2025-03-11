@@ -152,6 +152,10 @@ export const updateSensorReadings = async (req, res) => {
 
         await field.save();
 
+        if (moisture) {
+            checkIrrigation(fieldId);
+        }
+
         return res.status(200).json({
             message: "Sensor readings updated successfully",
             field: field,
