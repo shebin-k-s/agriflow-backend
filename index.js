@@ -2,7 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from 'dotenv';
 import session from "express-session";
-import { authRouter, fieldRouter } from "./routes/index.js";
+import { authRouter, fieldRouter, sensorRouter } from "./routes/index.js";
 import { verifyToken } from "./middleware/authMiddleware.js";
 
 
@@ -26,6 +26,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/field", verifyToken, fieldRouter);
+app.use("/api/v1/sensor", sensorRouter);
 
 
 

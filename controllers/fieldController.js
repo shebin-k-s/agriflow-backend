@@ -270,9 +270,6 @@ export const predictCropRecommendation = async (req, res) => {
         field.cropRecommendationsLastUpdated = new Date();
         await field.save();
 
-        console.log(responseData);
-
-
         return res.status(200).json({
             message: "Crop recommendation fetched successfully",
             fieldId: fieldId,
