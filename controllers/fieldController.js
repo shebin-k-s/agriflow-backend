@@ -30,13 +30,17 @@ export const addField = async (req, res) => {
         pastDate.setDate(today.getDate() - 365);
         const startDate = pastDate.toISOString().split("T")[0];
 
-        const weatherUrl = `https://archive-api.open-meteo.com/v1/archive?latitude=${latitude}&longitude=${longitude}&start_date=${startDate}&end_date=${endDate}&daily=temperature_2m_mean,precipitation_sum&timezone=UTC`;
+        const weatherUrl = `https://historical-forecast-api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&start_date=${startDate}&end_date=${endDate}&daily=temperature_2m_mean,precipitation_sum&timezone=UTC`;
+
+        console.log(weatherUrl);
 
         let annualRainfall = 0;
         let annualTemperature = 0;
 
         let attempts = 0;
         let success = false;
+
+        const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
         while (attempts < 3 && !success) {
             try {
@@ -50,10 +54,13 @@ export const addField = async (req, res) => {
                 }
             } catch (error) {
                 attempts++;
+                console.log(error);
+
                 console.error(`Error fetching weather data (Attempt ${attempts}/3):`, error.message);
                 if (attempts >= 3) {
                     return res.status(500).json({ message: "Failed to fetch weather data after multiple attempts" });
                 }
+                await delay(3000);
             }
         }
 
